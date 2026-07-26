@@ -215,7 +215,12 @@ useEffect(() => {
               >
                 Complaints
               </button>
-
+              <button
+                onClick={() => navigate("/community-requests")}
+                className="w-full hover:bg-orange-100 py-3 px-4 rounded-xl text-left"
+              >
+                Community Requests
+              </button>
               <button
                 onClick={() =>navigate("/student-notices")}
                 className="w-full hover:bg-orange-100 py-3 px-4 rounded-xl text-left"

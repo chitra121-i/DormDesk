@@ -3,13 +3,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import StudentLogin from "./pages/StudentLogin";
 import WardenLogin from "./pages/WardenLogin";
-
+import StudentRegister from "./pages/StudentRegister";
 import WardenDashboard from "./pages/WardenDashboard";
 import StudentDashboard from "./pages/StudentDashboard";
 import RoomsPage from "./pages/RoomsPage";
 import StudentRoomDetails from "./pages/StudentRoomDetails";
 import StudentsPage from "./pages/StudentsPage";
 import ComplaintsPage from "./pages/ComplaintsPage";
+import CommunityRequests from "./pages/CommunityRequests";
 import StudentComplaints from "./pages/StudentComplaints";
 import GatePassPage from "./pages/GatePassPage";
 import StudentGatePass from "./pages/StudentGatePass";
@@ -36,6 +37,11 @@ function App() {
         <Route
           path="/warden-login"
           element={<WardenLogin />}
+        />
+        {/*Student register */}
+        <Route
+       path="/student-register"
+       element={<StudentRegister />}
         />
 
         {/* Dashboard */}
@@ -73,6 +79,10 @@ function App() {
         <Route
           path="/complaints"
           element={<ComplaintsPage />}
+        />
+        <Route
+        path="/community-requests"
+        element={<CommunityRequests />}
         />
         <Route
           path="/student-complaints"

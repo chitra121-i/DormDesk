@@ -178,6 +178,22 @@ const handleLogin = async (e) => {
             >
               Login
             </button>
+            <div className="text-center mt-6">
+
+  <p className="text-gray-600">
+
+    Don't have an account?{" "}
+
+    <span
+      onClick={() => navigate("/student-register")}
+      className="text-orange-500 font-semibold cursor-pointer hover:underline"
+    >
+      Register Here
+    </span>
+
+  </p>
+
+</div>
 
           </form>
 
