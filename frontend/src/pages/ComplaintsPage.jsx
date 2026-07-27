@@ -16,7 +16,7 @@ function ComplaintsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/complaints/get_complaints.php"
+        "http://localhost/DormDesk/backend/complaints/get_complaints.php"
       );
 
       const data = await response.json();
@@ -51,7 +51,7 @@ function ComplaintsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/complaints/update_complaint_status.php",
+        "http://localhost/DormDesk/backend/complaints/update_complaint_status.php",
         {
           method: "POST",
 
@@ -89,7 +89,7 @@ function ComplaintsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/complaints/update_complaint_reply.php",
+        "http://localhost/DormDesk/backend/complaints/update_complaint_reply.php",
         {
           method: "POST",
 
@@ -138,7 +138,7 @@ function ComplaintsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/complaints/delete_complaint.php",
+        "http://localhost/DormDesk/backend/complaints/delete_complaint.php",
         {
           method: "POST",
 

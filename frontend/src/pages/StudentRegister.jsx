@@ -39,7 +39,7 @@ function StudentRegister() {
         try{
 
             const response = await fetch(
-                "http://localhost/hostel_api/students/register_student.php",
+                "http://localhost/DormDesk/backend/students/register_student.php",
                 {
                     method:"POST",
                     headers:{

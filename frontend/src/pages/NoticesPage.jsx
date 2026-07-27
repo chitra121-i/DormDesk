@@ -20,7 +20,7 @@ function NoticesPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/notices/get_notices.php"
+        "http://localhost/DormDesk/backend/notices/get_notices.php"
       );
 
       const data = await response.json();
@@ -58,7 +58,7 @@ function NoticesPage() {
     try{
 
       const response = await fetch(
-        "http://localhost/hostel_api/notices/add_notice.php",
+        "http://localhost/DormDesk/backend/notices/add_notice.php",
         {
           method:"POST",
 
@@ -109,7 +109,7 @@ function NoticesPage() {
     try{
 
       const response = await fetch(
-        "http://localhost/hostel_api/notices/delete_notice.php",
+        "http://localhost/DormDesk/backend/notices/delete_notice.php",
         {
           method:"POST",
 

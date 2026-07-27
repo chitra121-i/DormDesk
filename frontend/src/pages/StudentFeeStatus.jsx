@@ -10,7 +10,7 @@ const navigate = useNavigate();
  useEffect(() => {
 
   fetch(
-    `http://localhost/hostel_api/fees/get_student_fee.php?student_id=${student.id}`
+    `http://localhost/DormDesk/backend/fees/get_student_fee.php?student_id=${student.id}`
   )
     .then((res) => res.json())
     .then((data) => {

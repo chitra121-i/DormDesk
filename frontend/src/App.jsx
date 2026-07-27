@@ -18,6 +18,7 @@ import NoticesPage from "./pages/NoticesPage";
 import StudentNotices from "./pages/StudentNotices";
 import AlumniPage from "./pages/AlumniPage";
 import StudentFeeStatus from "./pages/StudentFeeStatus";
+import WardenCommunityRequests from "./pages/WardenCommunityRequests";
 
 function App() {
   return (
@@ -38,10 +39,11 @@ function App() {
           path="/warden-login"
           element={<WardenLogin />}
         />
+
         {/*Student register */}
         <Route
-       path="/student-register"
-       element={<StudentRegister />}
+          path="/student-register"
+          element={<StudentRegister />}
         />
 
         {/* Dashboard */}
@@ -49,6 +51,7 @@ function App() {
           path="/warden-dashboard"
           element={<WardenDashboard />}
         />
+        
          <Route
           path="/student-dashboard"
           element={<StudentDashboard />}
@@ -59,10 +62,12 @@ function App() {
           path="/rooms"
           element={<RoomsPage />}
         />
-      <Route
+
+        <Route
           path="/room-details"
          element={<StudentRoomDetails />}
         />
+
         {/* Student Management */}
         <Route
           path="/students"
@@ -80,10 +85,17 @@ function App() {
           path="/complaints"
           element={<ComplaintsPage />}
         />
+
         <Route
-        path="/community-requests"
-        element={<CommunityRequests />}
+          path="/warden-community-requests"
+          element={<WardenCommunityRequests />}
         />
+
+        <Route
+          path="/community-requests"
+          element={<CommunityRequests />}
+        />
+
         <Route
           path="/student-complaints"
           element={<StudentComplaints />}
@@ -94,23 +106,26 @@ function App() {
           path="/gatepasses"
           element={<GatePassPage />}
         />
+
         <Route
-        path="/student-gatepass"
-        element={<StudentGatePass />}
+          path="/student-gatepass"
+          element={<StudentGatePass />}
         />
+
         {/* Notices */}
         <Route
           path="/notices"
           element={<NoticesPage />}
         />
-      <Route
-       path="/student-notices"
-       element={<StudentNotices />}
+
+        <Route
+          path="/student-notices"
+          element={<StudentNotices />}
         />
-      <Route
-  path="/fee-status"
-  element={<StudentFeeStatus />}
-/>
+        <Route
+          path="/fee-status"
+          element={<StudentFeeStatus />}
+        />
  </Routes>
     </BrowserRouter>
   );

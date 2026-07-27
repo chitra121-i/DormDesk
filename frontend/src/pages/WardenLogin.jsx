@@ -14,7 +14,7 @@ function WardenLogin() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/warden_login.php",
+        "http://localhost/DormDesk/backend/warden_login.php",
         {
           method: "POST",
           headers: {

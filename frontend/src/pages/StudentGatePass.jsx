@@ -17,7 +17,7 @@ const student = JSON.parse(localStorage.getItem("student"));
   try {
 
     const response = await fetch(
-      `http://localhost/hostel_api/gatepasses/get_student_gatepasses.php?student_id=${student.id}`
+      `http://localhost/DormDesk/backend/gatepasses/get_student_gatepasses.php?student_id=${student.id}`
     );
 
     const data = await response.json();
@@ -72,7 +72,7 @@ const handleSubmit = async (e) => {
   try {
 
     const response = await fetch(
-      "http://localhost/hostel_api/gatepasses/apply_gatepass.php",
+      "http://localhost/DormDesk/backend/gatepasses/apply_gatepass.php",
       {
         method: "POST",
         headers: {

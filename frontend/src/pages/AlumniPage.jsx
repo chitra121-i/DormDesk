@@ -19,7 +19,7 @@ function AlumniPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/students/get_alumni.php"
+        "http://localhost/DormDesk/backend/students/get_alumni.php"
       );
 
       const data = await response.json();
@@ -49,7 +49,7 @@ function AlumniPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/students/auto_assign_room.php"
+        "http://localhost/DormDesk/backend/students/auto_assign_room.php"
       );
 
       const data = await response.json();
@@ -84,7 +84,7 @@ function AlumniPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/students/rejoin_student.php",
+        "http://localhost/DormDesk/backend/students/rejoin_student.php",
         {
           method: "POST",
 

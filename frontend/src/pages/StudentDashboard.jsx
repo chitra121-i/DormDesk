@@ -31,7 +31,7 @@ const [pendingFee, setPendingFee] = useState(0);
   const [noticeCount, setNoticeCount] =
     useState(0);
   useEffect(() => {
-  fetch("http://localhost/hostel_api/notices/get_notices.php")
+  fetch("http://localhost/DormDesk/backend/notices/get_notices.php")
     .then((res) => res.json())
    .then((data) => {
   if (data.success) {
@@ -43,7 +43,7 @@ const [pendingFee, setPendingFee] = useState(0);
 useEffect(() => {
 
   fetch(
-    `http://localhost/hostel_api/fees/get_student_fee.php?student_id=${student.id}`
+    `http://localhost/DormDesk/backend/fees/get_student_fee.php?student_id=${student.id}`
   )
     .then((res) => res.json())
     .then((data) => {
@@ -66,7 +66,7 @@ useEffect(() => {
 useEffect(() => {
 
   fetch(
-    `http://localhost/hostel_api/fees/get_student_fee.php?student_id=${student.id}`
+    `http://localhost/DormDesk/backend/fees/get_student_fee.php?student_id=${student.id}`
   )
     .then((res) => res.json())
     .then((data) => {
@@ -84,7 +84,7 @@ useEffect(() => {
 useEffect(() => {
 
  fetch(
-  `http://localhost/hostel_api/complaints/get_student_complaints.php?student_id=${student.id}`
+  `http://localhost/DormDesk/backend/complaints/get_student_complaints.php?student_id=${student.id}`
 )
     .then((res) => res.json())
     .then((data) => {
@@ -110,7 +110,7 @@ useEffect(() => {
     try {
 
       const response = await fetch(
-        `http://localhost/hostel_api/gatepasses/get_student_gatepasses.php?student_id=${student.id}`
+        `http://localhost/DormDesk/backend/gatepasses/get_student_gatepasses.php?student_id=${student.id}`
       );
 
       const data = await response.json();
@@ -142,7 +142,7 @@ useEffect(() => {
 useEffect(() => {
 
   fetch(
-  `http://localhost/hostel_api/dashboard/get_student_activities.php?student_id=${student.id}`
+  `http://localhost/DormDesk/backend/dashboard/get_student_activities.php?student_id=${student.id}`
 )
     .then((res) => res.json())
     .then((data) => {

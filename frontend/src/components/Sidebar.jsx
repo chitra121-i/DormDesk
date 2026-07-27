@@ -46,6 +46,13 @@ function Sidebar() {
         </Link>
 
         <Link
+          to="/warden-community-requests"
+          className="block p-4 rounded-xl hover:bg-orange-50"
+        >
+          Community Requests
+        </Link>
+
+        <Link
           to="/gatepasses"
           className="block p-4 rounded-xl hover:bg-orange-50"
         >

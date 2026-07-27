@@ -19,7 +19,7 @@ function StudentComplaints() {
   try {
 
     const response = await fetch(
-      `http://localhost/hostel_api/complaints/get_student_complaints.php?student_id=${student.id}`
+      `http://localhost/DormDesk/backend/complaints/get_student_complaints.php?student_id=${student.id}`
     );
 
     const data = await response.json();
@@ -50,7 +50,7 @@ function StudentComplaints() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/complaints/add_complaint.php",
+        "http://localhost/DormDesk/backend/complaints/add_complaint.php",
         {
           method: "POST",
 

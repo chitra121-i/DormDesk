@@ -15,7 +15,7 @@ function GatePassPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/gatepasses/get_gatepasses.php"
+        "http://localhost/DormDesk/backend/gatepasses/get_gatepasses.php"
       );
 
       const data = await response.json();
@@ -45,7 +45,7 @@ function GatePassPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/gatepasses/approve_gatepass.php",
+        "http://localhost/DormDesk/backend/gatepasses/approve_gatepass.php",
         {
           method: "POST",
 
@@ -88,7 +88,7 @@ function GatePassPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/gatepasses/reject_gatepass.php",
+        "http://localhost/DormDesk/backend/gatepasses/reject_gatepass.php",
         {
           method: "POST",
 

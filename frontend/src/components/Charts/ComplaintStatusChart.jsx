@@ -24,7 +24,7 @@ function ComplaintStatusChart() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/complaints/get_complaint_status.php"
+        "http://localhost/DormDesk/backend/complaints/get_complaint_status.php"
       );
 
       const result =

@@ -22,7 +22,7 @@ function StudentsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/students/get_students.php"
+        "http://localhost/DormDesk/backend/students/get_students.php"
       );
 
       const data = await response.json();
@@ -54,7 +54,7 @@ function StudentsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/students/auto_assign_room.php"
+        "http://localhost/DormDesk/backend/students/auto_assign_room.php"
       );
 
       const data = await response.json();
@@ -106,7 +106,7 @@ function StudentsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/students/add_student.php",
+        "http://localhost/DormDesk/backend/students/add_student.php",
         {
           method: "POST",
           headers: {
@@ -170,7 +170,7 @@ function StudentsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/students/update_student.php",
+        "http://localhost/DormDesk/backend/students/update_student.php",
         {
           method: "POST",
 
@@ -220,7 +220,7 @@ function StudentsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/students/remove_student.php",
+        "http://localhost/DormDesk/backend/students/remove_student.php",
         {
           method: "POST",
 

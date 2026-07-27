@@ -19,7 +19,7 @@ function RoomsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/rooms/get_rooms.php"
+        "http://localhost/DormDesk/backend/rooms/get_rooms.php"
       );
 
       const data = await response.json();
@@ -51,7 +51,7 @@ function RoomsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/rooms/add_room.php",
+        "http://localhost/DormDesk/backend/rooms/add_room.php",
         {
           method: "POST",
 
@@ -96,7 +96,7 @@ function RoomsPage() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/rooms/delete_room.php",
+        "http://localhost/DormDesk/backend/rooms/delete_room.php",
         {
           method: "POST",
 

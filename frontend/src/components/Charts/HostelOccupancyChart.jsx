@@ -24,7 +24,7 @@ function HostelOccupancyChart() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/charts/get_hostel_occupancy.php"
+        "http://localhost/DormDesk/backend/charts/get_hostel_occupancy.php"
       );
 
       const data = await response.json();

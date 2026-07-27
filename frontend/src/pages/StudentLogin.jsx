@@ -13,7 +13,7 @@ const handleLogin = async (e) => {
   try {
 
     const response = await fetch(
-      "http://localhost/hostel_api/students/student_login.php",
+      "http://localhost/DormDesk/backend/students/student_login.php",
       {
         method: "POST",
         headers: {

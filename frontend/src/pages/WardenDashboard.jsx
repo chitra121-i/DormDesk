@@ -40,7 +40,7 @@ useEffect(() => {
       try {
 
         const response = await fetch(
-          "http://localhost/hostel_api/dashboard/get_dashboard_stats.php"
+          "http://localhost/DormDesk/backend/dashboard/get_dashboard_stats.php"
         );
 
         const data = await response.json();
@@ -70,7 +70,7 @@ useEffect(() => {
       try {
 
         const response = await fetch(
-          "http://localhost/hostel_api/dashboard/get_recent_activity.php"
+          "http://localhost/DormDesk/backend/dashboard/get_recent_activity.php"
         );
 
         const data = await response.json();

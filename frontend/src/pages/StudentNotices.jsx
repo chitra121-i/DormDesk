@@ -8,7 +8,7 @@ function StudentNotices() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost/hostel_api/notices/get_notices.php")
+    fetch("http://localhost/DormDesk/backend/notices/get_notices.php")
       .then((res) => res.json())
       .then((data) => {
   if (data.success) {

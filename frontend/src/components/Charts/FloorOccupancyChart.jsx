@@ -20,7 +20,7 @@ function FloorOccupancyChart() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/charts/get_floor_occupancy.php"
+        "http://localhost/DormDesk/backend/charts/get_floor_occupancy.php"
       );
 
       const result = await response.json();

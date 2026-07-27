@@ -27,7 +27,7 @@ function ComplaintCategoryChart() {
     try {
 
       const response = await fetch(
-        "http://localhost/hostel_api/complaints/get_complaint_categories.php"
+        "http://localhost/DormDesk/backend/complaints/get_complaint_categories.php"
       );
 
       const result =
