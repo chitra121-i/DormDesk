@@ -26,7 +26,16 @@ const handleLogin = async (e) => {
       }
     );
 
-    const data = await response.json();
+    const text = await response.text();
+
+    console.log("RAW RESPONSE FROM PHP:");
+    console.log(text);
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error ${response.status}`);
+    }
+
+    const data = JSON.parse(text);
 
     if(data.success){
 

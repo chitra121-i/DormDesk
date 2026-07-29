@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $conn = new mysqli(
-    "localhost",
+    "127.0.0.1",
     "root",
     "",
     "hostel_db"

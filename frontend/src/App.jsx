@@ -19,6 +19,7 @@ import StudentNotices from "./pages/StudentNotices";
 import AlumniPage from "./pages/AlumniPage";
 import StudentFeeStatus from "./pages/StudentFeeStatus";
 import WardenCommunityRequests from "./pages/WardenCommunityRequests";
+import RulesPage from "./pages/RulesPage";
 
 function App() {
   return (
@@ -116,6 +117,11 @@ function App() {
         <Route
           path="/notices"
           element={<NoticesPage />}
+        />
+
+        <Route
+          path="/rules"
+          element={<RulesPage />}
         />
 
         <Route

@@ -60,6 +60,13 @@ function Sidebar() {
         </Link>
 
         <Link
+          to="/rules"
+          className="block p-4 rounded-xl hover:bg-orange-50"
+        >
+          Hostel Rules
+        </Link>
+
+        <Link
           to="/notices"
           className="block p-4 rounded-xl hover:bg-orange-50"
         >
