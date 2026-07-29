@@ -8,8 +8,11 @@ import ComplaintCategoryChart from "../components/Charts/ComplaintCategoryChart"
 
 function ComplaintsPage() {
 
-  const [complaints, setComplaints] =
-    useState([]);
+  const [complaints, setComplaints] = useState([]);
+
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const [sortOrder, setSortOrder] = useState("Newest");
 
   const loadComplaints = async () => {
 
@@ -172,6 +175,40 @@ function ComplaintsPage() {
 
   };
 
+  const filteredComplaints =
+    selectedCategory === "All"
+      ? complaints
+      : complaints.filter(
+          (item) => item.category === selectedCategory
+        );
+
+  const displayComplaints = [...filteredComplaints].sort((a, b) => {
+
+    const aRagging =
+      a.category === "Bullying and Ragging";
+
+    const bRagging =
+      b.category === "Bullying and Ragging";
+
+    // Ragging complaints always first
+
+    if (aRagging && !bRagging) return -1;
+
+    if (!aRagging && bRagging) return 1;
+
+    const dateA = new Date(a.created_at);
+
+    const dateB = new Date(b.created_at);
+
+    if (sortOrder === "Newest") {
+
+      return dateB - dateA;
+
+    }
+
+    return dateA - dateB;
+
+  });
   return (
 
     <div className="flex bg-gray-100">
@@ -198,29 +235,92 @@ function ComplaintsPage() {
 
           <div>
 
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
 
               <h2 className="text-3xl font-bold">
 
-                Student Complaints
+              Student Complaints
 
-              </h2>
+            </h2>
+
+            <div className="flex items-center gap-4">
+
+              <select
+                value={selectedCategory}
+                onChange={(e) =>
+                  setSelectedCategory(e.target.value)
+                }
+                className="border rounded-xl px-4 py-2 bg-white"
+              >
+
+                <option value="All">
+                  All Categories
+                </option>
+
+                <option value="Electrical & Internet">
+                  Electrical & Internet
+                </option>
+
+                <option value="Bathroom & Washroom">
+                  Bathroom & Washroom
+                </option>
+
+                <option value="Mess">
+                  Mess
+                </option>
+
+                <option value="Theft">
+                  Theft
+                </option>
+
+                <option value="Bullying and Ragging">
+                  Bullying and Ragging
+                </option>
+
+                <option value="Other">
+                  Other
+                </option>
+
+              </select>
+
+              <button
+                onClick={() =>
+                  setSortOrder(
+                    sortOrder === "Newest"
+                      ? "Oldest"
+                      : "Newest"
+                  )
+                }
+                className="bg-white border border-orange-300 text-orange-500 px-4 py-2 rounded-xl hover:bg-orange-50 transition"
+              >
+
+                {sortOrder === "Newest"
+                  ? "⬇ Newest First"
+                  : "⬆ Oldest First"}
+
+              </button>
 
               <span className="bg-orange-100 text-orange-600 px-4 py-2 rounded-xl font-medium">
 
-                {complaints.length} Complaints
+                {displayComplaints.length} Complaints
 
               </span>
 
             </div>
 
+            </div>
+
             <div className="space-y-5">
 
-              {complaints.map((item) => (
+              {displayComplaints.map((item) => (
 
                 <div
                   key={item.id}
-                  className="bg-white rounded-3xl shadow p-6"
+                  className={`rounded-3xl shadow p-6 transition ${
+                    item.category === "Bullying and Ragging"
+                      ? "border-2 border-red-500 bg-red-50"
+                      : "bg-white"
+                  }`}
                 >
 
                   <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -248,6 +348,12 @@ function ComplaintsPage() {
                           {item.category}
 
                         </span>
+
+                        {item.category === "Bullying and Ragging" && (
+                          <span className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                            HIGH PRIORITY
+                          </span>
+                        )}
 
                       </div>
 

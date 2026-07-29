@@ -20,11 +20,11 @@ $data = json_decode(
 
 $student_id = $data["student_id"];
 $allowedCategories = [
-    "Electrical",
+    "Electrical and Internet",
     "Bathroom and Washroom",
     "Theft",
-    "Mess and Food",
-    "Internet",
+    "Mess",
+    "Bullying and Ragging",
     "Other"
 ];
 

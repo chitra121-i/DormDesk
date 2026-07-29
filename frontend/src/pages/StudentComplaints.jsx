@@ -166,11 +166,11 @@ function StudentComplaints() {
   onChange={(e) => setCategory(e.target.value)}
   className="w-full border border-gray-300 rounded-xl p-3 focus:ring-2 focus:ring-orange-400"
 >
-  <option value="Electrical">Electrical</option>
+  <option value="Electrical and Internet">Electrical and Internet</option>
   <option value="Bathroom and Washroom">Bathroom and Washroom</option>
   <option value="Theft">Theft</option>
-  <option value="Mess and Food">Mess and Food</option>
-  <option value="Internet">Internet</option>
+  <option value="Mess">Mess</option>
+  <option value="Bullying and Ragging">Bullying and Ragging</option>
   <option value="Other">Other</option>
 
               </select>
