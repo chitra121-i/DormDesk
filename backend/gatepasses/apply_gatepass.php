@@ -1,6 +1,7 @@
 <?php
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -25,40 +26,57 @@ $sql = "
 
 INSERT INTO gatepasses
 (
-student_id,
-reason,
-out_date,
-out_time,
-return_date,
-return_time,
-status
+    student_id,
+    reason,
+    out_date,
+    out_time,
+    return_date,
+    return_time,
+    status
 )
 
 VALUES
 (
-'$student_id',
-'$reason',
-'$out_date',
-'$out_time',
-'$return_date',
-'$return_time',
-'Pending'
+    '$student_id',
+    '$reason',
+    '$out_date',
+    '$out_time',
+    '$return_date',
+    '$return_time',
+    'Pending'
 )
 
 ";
 
-if($conn->query($sql)){
+if ($conn->query($sql)) {
+
+    // Student Activity
+    logStudentActivity(
+        $conn,
+        $student_id,
+        "Gatepass Applied",
+        "Your gatepass request has been submitted.",
+        "orange"
+    );
+
+    // Warden Activity
+    logWardenActivity(
+        $conn,
+        "Gatepass Submitted",
+        "A student submitted a gatepass request.",
+        "orange"
+    );
 
     echo json_encode([
-        "success"=>true,
-        "message"=>"Gatepass Submitted"
+        "success" => true,
+        "message" => "Gatepass Submitted"
     ]);
 
-}else{
+} else {
 
     echo json_encode([
-        "success"=>false,
-        "message"=>$conn->error
+        "success" => false,
+        "message" => $conn->error
     ]);
 
 }

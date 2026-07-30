@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 }
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -27,24 +28,37 @@ if (!$request_id || !$status || !$priority) {
     exit();
 }
 
+/* Fetch request details for activity logs */
+
+$result = $conn->prepare("
+SELECT created_by, title
+FROM community_requests
+WHERE id = ?
+");
+
+$result->bind_param("i", $request_id);
+$result->execute();
+
+$request = $result->get_result()->fetch_assoc();
+
+$student_id = $request["created_by"];
+$title = $request["title"];
+
 /*
     If request is marked Resolved,
     store current timestamp.
 
-    If changed back to Pending,
-    remove resolved timestamp.
+    Otherwise remove resolved timestamp.
 */
 
 if ($status === "Resolved") {
 
     $sql = "
     UPDATE community_requests
-
     SET
         status = ?,
         priority = ?,
         resolved_at = CURRENT_TIMESTAMP
-
     WHERE id = ?
     ";
 
@@ -52,12 +66,10 @@ if ($status === "Resolved") {
 
     $sql = "
     UPDATE community_requests
-
     SET
         status = ?,
         priority = ?,
         resolved_at = NULL
-
     WHERE id = ?
     ";
 
@@ -73,6 +85,25 @@ $stmt->bind_param(
 );
 
 if ($stmt->execute()) {
+
+    // Warden Activity
+
+    logWardenActivity(
+        $conn,
+        "Community Request Updated",
+        "Updated \"$title\" to $status ($priority Priority).",
+        "green"
+    );
+
+    // Student Activity
+
+    logStudentActivity(
+        $conn,
+        $student_id,
+        "Community Request Updated",
+        "Your request \"$title\" has been marked as '$status' with '$priority' priority.",
+        "green"
+    );
 
     echo json_encode([
         "success" => true,

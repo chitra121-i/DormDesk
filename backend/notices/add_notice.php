@@ -23,15 +23,32 @@ VALUES
 
 if($conn->query($sql)){
 
-    // Activity Log (Visible to all students)
+    // Warden Activity
+    logWardenActivity(
+        $conn,
+        "Notice Published",
+        "Published notice \"$title\".",
+        "orange"
+    );
 
-   addActivity(
-    $conn,
-    null,
-    "Notice Published",
-    $title,
-    "orange"
-);
+    // Student Activity
+    $students = $conn->query("
+        SELECT id
+        FROM students
+        WHERE approval_status='Approved'
+    ");
+
+    while($student = $students->fetch_assoc()){
+
+        logStudentActivity(
+            $conn,
+            $student["id"],
+            "Notice Published",
+            $title,
+            "orange"
+        );
+
+    }
 
     echo json_encode([
 

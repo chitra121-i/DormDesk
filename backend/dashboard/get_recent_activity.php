@@ -4,12 +4,24 @@ include "../db.php";
 
 header("Content-Type: application/json");
 
-$result = $conn->query("
-SELECT *
+$sql = "
+
+SELECT
+id,
+title,
+description,
+color,
+created_at
+
 FROM activities
+
 ORDER BY created_at DESC
+
 LIMIT 5
-");
+
+";
+
+$result = $conn->query($sql);
 
 $activities = [];
 

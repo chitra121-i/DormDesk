@@ -176,6 +176,14 @@ const handleSupport = async (requestId) => {
 
         <section className="min-h-screen bg-gray-100 p-6">
 
+            {/* Back Button */}
+
+            <button
+                onClick={() => navigate("/student-dashboard")}
+                className="mb-6 flex items-center gap-2 bg-white text-orange-500 border-2 border-orange-500 px-5 py-2 rounded-xl shadow hover:bg-orange-500 hover:text-white transition-all duration-200"
+            >
+                ← Back
+            </button>
 
             <h1 className="text-4xl font-bold text-orange-500">
                 Community Requests

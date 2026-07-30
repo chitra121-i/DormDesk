@@ -1,6 +1,7 @@
 <?php
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
 header("Content-Type: application/json");
 
@@ -31,20 +32,20 @@ WHERE id='$id'
 
 $student_id = $complaint['student_id'];
 
-$conn->query("
+    logWardenActivity(
+        $conn,
+        "Complaint Status Updated",
+        "Updated Complaint ID $id to '$status'",
+        "orange"
+    );
 
-INSERT INTO activities
-(student_id, title, description, color)
-
-VALUES
-(
-    '$student_id',
-    'Complaint Updated',
-    'Your complaint status has been updated',
-    'orange'
-)
-
-");
+    logStudentActivity(
+        $conn,
+        $student_id,
+        "Complaint Status Updated",
+        "Your complaint status has been changed to '$status'.",
+        "orange"
+    );
 
     echo json_encode([
         "success"=>true,
@@ -59,6 +60,8 @@ VALUES
     ]);
 
 }
+
+
 
 $conn->close();
 

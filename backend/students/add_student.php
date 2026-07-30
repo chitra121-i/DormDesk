@@ -1,10 +1,11 @@
 <?php
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
-$data = json_decode(
-    file_get_contents("php://input")
-);
+header("Content-Type: application/json");
+
+$data = json_decode(file_get_contents("php://input"));
 
 if (!$data) {
 
@@ -24,19 +25,21 @@ $room_no = $data->room_no;
 
 $password = "student123";
 
-$checkRoom = $conn->query(
-"
+/* -----------------------------
+   Check Room Exists
+----------------------------- */
+
+$checkRoom = $conn->query("
 SELECT *
 FROM rooms
 WHERE room_no='$room_no'
-"
-);
+");
 
-if($checkRoom->num_rows == 0){
+if ($checkRoom->num_rows == 0) {
 
     echo json_encode([
-        "success"=>false,
-        "message"=>"Room Not Found"
+        "success" => false,
+        "message" => "Room Not Found"
     ]);
 
     exit();
@@ -44,88 +47,95 @@ if($checkRoom->num_rows == 0){
 
 $room = $checkRoom->fetch_assoc();
 
-if(
-    $room["current_students"]
-    >=
-    $room["capacity"]
-){
+/* -----------------------------
+   Check Room Capacity
+----------------------------- */
+
+if ($room["current_students"] >= $room["capacity"]) {
 
     echo json_encode([
-        "success"=>false,
-        "message"=>"Room Full"
+        "success" => false,
+        "message" => "Room Full"
     ]);
 
     exit();
 }
 
+/* -----------------------------
+   Add Student
+----------------------------- */
+
 $sql = "
 INSERT INTO students
 (
-name,
-roll_no,
-phone,
-email,
-password,
-room_no,
-status,
-joined_at,
-left_at
+    name,
+    roll_no,
+    phone,
+    email,
+    password,
+    room_no,
+    status,
+    joined_at,
+    left_at
 )
+
 VALUES
 (
-'$name',
-'$roll_no',
-'$phone',
-'$email',
-'$password',
-'$room_no',
-'present',
-CURDATE(),
-NULL
+    '$name',
+    '$roll_no',
+    '$phone',
+    '$email',
+    '$password',
+    '$room_no',
+    'present',
+    CURDATE(),
+    NULL
 )
 ";
 
-if($conn->query($sql)){
+if ($conn->query($sql)) {
 
-    $conn->query(
-    "
+    $newStudentId = $conn->insert_id;
+
+    /* Increase Room Count */
+
+    $conn->query("
     UPDATE rooms
-    SET current_students =
-    current_students + 1
+    SET current_students = current_students + 1
     WHERE room_no='$room_no'
-    "
+    ");
+
+    /* Warden Activity */
+
+    logWardenActivity(
+        $conn,
+        "Student Added",
+        "$name added to Room $room_no.",
+        "green"
     );
 
-    /* Activity Log */
+    /* Student Activity */
 
-    $conn->query(
-    "
-    INSERT INTO activities
-    (
-        title,
-        description,
-        color
-    )
-    VALUES
-    (
-        'Student Added',
-        '$name added to Room $room_no',
-        'green'
-    )
-    "
+    logStudentActivity(
+        $conn,
+        $newStudentId,
+        "Hostel Admission",
+        "You have been allotted Room $room_no. Welcome to the hostel!",
+        "green"
     );
 
     echo json_encode([
-        "success"=>true,
-        "message"=>"Student Added"
+        "success" => true,
+        "message" => "Student Added"
     ]);
 
-}else{
+} else {
 
     echo json_encode([
-        "success"=>false,
-        "message"=>"Failed"
+        "success" => false,
+        "message" => "Failed"
     ]);
+
 }
 
 $conn->close();

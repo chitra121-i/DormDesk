@@ -86,4 +86,6 @@ TIMESTAMP(return_date,return_time)
 
 $conn->query($expireGatepassQuery);
 
+$conn->close();
+
 ?>

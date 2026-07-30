@@ -1,71 +1,101 @@
 <?php
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
-$data = json_decode(
-    file_get_contents("php://input")
-);
+header("Content-Type: application/json");
+
+$data = json_decode(file_get_contents("php://input"));
+
+if (!$data) {
+
+    echo json_encode([
+        "success" => false,
+        "message" => "No Data Received"
+    ]);
+
+    exit();
+}
 
 $id = $data->id;
 
-$getStudent = $conn->query(
-"
+/* -----------------------------
+   Get Student Details
+----------------------------- */
+
+$getStudent = $conn->query("
 SELECT *
 FROM students
 WHERE id='$id'
-"
-);
+");
 
-$student =
-$getStudent->fetch_assoc();
+if ($getStudent->num_rows == 0) {
 
-$studentName =
-$student["name"];
+    echo json_encode([
+        "success" => false,
+        "message" => "Student Not Found"
+    ]);
 
-$room_no =
-$student["room_no"];
+    exit();
+}
 
-$conn->query(
-"
+$student = $getStudent->fetch_assoc();
+
+$studentName = $student["name"];
+$room_no = $student["room_no"];
+
+/* -----------------------------
+   Move Student to Alumni
+----------------------------- */
+
+$conn->query("
 UPDATE students
 SET
-status='alumni',
-left_at=CURDATE()
+    status='alumni',
+    left_at=CURDATE()
 WHERE id='$id'
-"
-);
+");
 
-$conn->query(
-"
+/* -----------------------------
+   Decrease Room Count
+----------------------------- */
+
+$conn->query("
 UPDATE rooms
-SET current_students =
-current_students - 1
+SET current_students = current_students - 1
 WHERE room_no='$room_no'
-"
+");
+
+/* -----------------------------
+   Warden Activity
+----------------------------- */
+
+logWardenActivity(
+    $conn,
+    "Student Removed",
+    "$studentName moved to Alumni.",
+    "red"
 );
 
-/* Activity Log */
+/* -----------------------------
+   Student Activity
+----------------------------- */
 
-$conn->query(
-"
-INSERT INTO activities
-(
-title,
-description,
-color
-)
-VALUES
-(
-'Student Removed',
-'$studentName moved to alumni',
-'red'
-)
-"
+logStudentActivity(
+    $conn,
+    $id,
+    "Removed from Hostel",
+    "You have been removed from the hostel and marked as Alumni.",
+    "red"
 );
+
+/* -----------------------------
+   Response
+----------------------------- */
 
 echo json_encode([
-    "success"=>true,
-    "message"=>"Student Moved To Alumni"
+    "success" => true,
+    "message" => "Student Moved To Alumni"
 ]);
 
 $conn->close();

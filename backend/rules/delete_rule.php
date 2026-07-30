@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 }
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
 $data = json_decode(
     file_get_contents("php://input"),
@@ -29,10 +30,26 @@ if (!$id) {
     exit();
 }
 
-$sql = "
-    DELETE FROM hostel_rules
+/* Get Rule */
 
-    WHERE id = ?
+$getRule = $conn->prepare("
+SELECT rule_text
+FROM hostel_rules
+WHERE id=?
+");
+
+$getRule->bind_param("i",$id);
+$getRule->execute();
+
+$rule = $getRule->get_result()->fetch_assoc();
+
+$ruleText = $rule["rule_text"];
+
+/* Delete Rule */
+
+$sql = "
+DELETE FROM hostel_rules
+WHERE id = ?
 ";
 
 $stmt = $conn->prepare($sql);
@@ -43,6 +60,33 @@ $stmt->bind_param(
 );
 
 if ($stmt->execute()) {
+
+    // Warden Activity
+    logWardenActivity(
+        $conn,
+        "Hostel Rule Deleted",
+        "Deleted a hostel rule.",
+        "red"
+    );
+
+    // Student Activities
+    $students = $conn->query("
+        SELECT id
+        FROM students
+        WHERE approval_status='Approved'
+    ");
+
+    while($student = $students->fetch_assoc()){
+
+        logStudentActivity(
+            $conn,
+            $student["id"],
+            "Hostel Rule Deleted",
+            $ruleText,
+            "red"
+        );
+
+    }
 
     echo json_encode([
         "success" => true,

@@ -1,47 +1,64 @@
 <?php
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
 header("Content-Type: application/json");
 
-$data = json_decode(
-    file_get_contents("php://input")
-);
+$data = json_decode(file_get_contents("php://input"));
+
+if (!$data) {
+
+    echo json_encode([
+        "success" => false,
+        "message" => "No Data Received"
+    ]);
+
+    exit();
+}
 
 $id = $data->id;
 $room_no = $data->room_no;
 
-/* Get Student Name */
+/* -----------------------------
+   Get Student Details
+----------------------------- */
 
-$studentQuery = $conn->query(
-"
-SELECT name
+$studentQuery = $conn->query("
+SELECT *
 FROM students
 WHERE id='$id'
-"
-);
+");
 
-$student =
-$studentQuery->fetch_assoc();
+if ($studentQuery->num_rows == 0) {
 
-$studentName =
-$student["name"];
+    echo json_encode([
+        "success" => false,
+        "message" => "Student Not Found"
+    ]);
 
-/* Check Room */
+    exit();
+}
 
-$roomQuery = $conn->query(
-"
+$student = $studentQuery->fetch_assoc();
+
+$studentName = $student["name"];
+
+/* -----------------------------
+   Check Room Exists
+----------------------------- */
+
+$roomQuery = $conn->query("
 SELECT *
 FROM rooms
 WHERE room_no='$room_no'
-"
-);
+");
 
-if($roomQuery->num_rows == 0){
+if ($roomQuery->num_rows == 0) {
 
     echo json_encode([
-        "success"=>false,
-        "message"=>"Room Not Found"
+        "success" => false,
+        "message" => "Room Not Found"
     ]);
 
     exit();
@@ -49,66 +66,74 @@ if($roomQuery->num_rows == 0){
 
 $room = $roomQuery->fetch_assoc();
 
-if(
-    $room["current_students"]
-    >=
-    $room["capacity"]
-){
+/* -----------------------------
+   Check Room Capacity
+----------------------------- */
+
+if ($room["current_students"] >= $room["capacity"]) {
 
     echo json_encode([
-        "success"=>false,
-        "message"=>"Room Full"
+        "success" => false,
+        "message" => "Room Full"
     ]);
 
     exit();
 }
 
-/* Rejoin Student */
+/* -----------------------------
+   Rejoin Student
+----------------------------- */
 
-$conn->query(
-"
+$conn->query("
 UPDATE students
 SET
-status='present',
-room_no='$room_no',
-left_at=NULL
+    status='present',
+    room_no='$room_no',
+    joined_at=CURDATE(),
+    left_at=NULL
 WHERE id='$id'
-"
-);
+");
 
-/* Increase Room Count */
+/* -----------------------------
+   Increase Room Count
+----------------------------- */
 
-$conn->query(
-"
+$conn->query("
 UPDATE rooms
-SET current_students =
-current_students + 1
+SET current_students = current_students + 1
 WHERE room_no='$room_no'
-"
+");
+
+/* -----------------------------
+   Warden Activity
+----------------------------- */
+
+logWardenActivity(
+    $conn,
+    "Student Rejoined",
+    "$studentName rejoined and was assigned to Room $room_no.",
+    "green"
 );
 
-/* Activity Log */
+/* -----------------------------
+   Student Activity
+----------------------------- */
 
-$conn->query(
-"
-INSERT INTO activities
-(
-title,
-description,
-color
-)
-VALUES
-(
-'Student Rejoined',
-'$studentName rejoined in room $room_no',
-'green'
-)
-"
+logStudentActivity(
+    $conn,
+    $id,
+    "Hostel Rejoined",
+    "Welcome back! You have been assigned to Room $room_no.",
+    "green"
 );
+
+/* -----------------------------
+   Response
+----------------------------- */
 
 echo json_encode([
-    "success"=>true,
-    "message"=>"Student Rejoined Successfully"
+    "success" => true,
+    "message" => "Student Rejoined Successfully"
 ]);
 
 $conn->close();

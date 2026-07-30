@@ -6,6 +6,9 @@ header("Content-Type: application/json");
 
 
 include "../db.php";
+include "../helpers/activity_helper.php";
+
+
 
 
 $data = json_decode(file_get_contents("php://input"), true);
@@ -13,6 +16,14 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 $request_id = $data["request_id"];
 $student_id = $data["student_id"];
+
+$request = $conn->query("
+SELECT title
+FROM community_requests
+WHERE id='$request_id'
+")->fetch_assoc();
+
+$title = $request["title"]; 
 
 
 // Check if already supported
@@ -38,6 +49,8 @@ $result = $check->get_result();
 
 
 if($result->num_rows > 0){
+
+
 
     echo json_encode([
         "success"=>false,
@@ -69,6 +82,13 @@ $sql->bind_param(
 
 if($sql->execute()){
 
+    logStudentActivity(
+        $conn,
+        $student_id,
+        "Supported Community Request",
+        "You supported \"$title\".",
+        "blue"
+    );
 
     echo json_encode([
 

@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 }
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -29,6 +30,20 @@ if (!$request_id) {
     Delete supports first because
     request_supports contains request_id.
 */
+
+$result = $conn->prepare("
+SELECT created_by,title
+FROM community_requests
+WHERE id=?
+");
+
+$result->bind_param("i",$request_id);
+$result->execute();
+
+$request = $result->get_result()->fetch_assoc();
+
+$student_id = $request["created_by"];
+$title = $request["title"];
 
 $delete_supports = $conn->prepare(
     "DELETE FROM request_supports WHERE request_id = ?"
@@ -51,6 +66,21 @@ $delete_request->bind_param(
 );
 
 if ($delete_request->execute()) {
+
+    logStudentActivity(
+        $conn,
+        $student_id,
+        "Community Request Deleted",
+        "Your request \"$title\" has been deleted.",
+        "red"
+    );
+
+    logWardenActivity(
+        $conn,
+        "Community Request Deleted",
+        "Deleted community request \"$title\".",
+        "red"
+    );
 
     echo json_encode([
         "success" => true,

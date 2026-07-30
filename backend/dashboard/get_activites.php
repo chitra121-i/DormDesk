@@ -6,9 +6,17 @@ header("Content-Type: application/json");
 
 $sql = "
 
-SELECT *
+SELECT
+id,
+title,
+description,
+color,
+created_at
+
 FROM activities
+
 ORDER BY created_at DESC
+
 LIMIT 10
 
 ";

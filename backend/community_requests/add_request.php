@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "OPTIONS") {
 }
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -52,9 +53,11 @@ if ($stmt->execute()) {
 
     // Automatically support own request
 
-    $support_sql = "INSERT INTO request_supports
+    $support_sql = "
+    INSERT INTO request_supports
     (request_id, student_id)
-    VALUES (?, ?)";
+    VALUES (?, ?)
+    ";
 
     $support_stmt = $conn->prepare($support_sql);
 
@@ -65,6 +68,25 @@ if ($stmt->execute()) {
     );
 
     $support_stmt->execute();
+
+    // Student Activity
+
+    logStudentActivity(
+        $conn,
+        $created_by,
+        "Community Request Submitted",
+        "Your community request has been submitted.",
+        "orange"
+    );
+
+    // Warden Activity
+
+    logWardenActivity(
+        $conn,
+        "Community Request Submitted",
+        "A new community request was submitted.",
+        "orange"
+    );
 
     echo json_encode([
         "success" => true,

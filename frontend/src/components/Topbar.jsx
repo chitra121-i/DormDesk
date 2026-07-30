@@ -11,7 +11,13 @@ function Topbar() {
     );
 
     if (confirmLogout) {
-      navigate("/");
+
+      // Remove login session
+      localStorage.removeItem("warden");
+
+      // Go to Home page
+      navigate("/", { replace: true });
+
     }
 
   };

@@ -1,6 +1,9 @@
 <?php
 
 include "../db.php";
+include "../helpers/activity_helper.php";
+
+header("Content-Type: application/json");
 
 $data = json_decode(file_get_contents("php://input"));
 
@@ -18,10 +21,11 @@ $room_no = $data->room_no;
 $floor_no = $data->floor_no;
 $capacity = $data->capacity;
 
-$check = $conn->query(
-    "SELECT * FROM rooms
-     WHERE room_no='$room_no'"
-);
+$check = $conn->query("
+SELECT *
+FROM rooms
+WHERE room_no='$room_no'
+");
 
 if ($check->num_rows > 0) {
 
@@ -34,6 +38,7 @@ if ($check->num_rows > 0) {
 }
 
 $sql = "
+
 INSERT INTO rooms
 (
     room_no,
@@ -41,6 +46,7 @@ INSERT INTO rooms
     capacity,
     current_students
 )
+
 VALUES
 (
     '$room_no',
@@ -48,27 +54,18 @@ VALUES
     '$capacity',
     0
 )
+
 ";
 
 if ($conn->query($sql)) {
 
-    /* Activity Log */
+    // Warden Activity
 
-    $conn->query(
-    "
-    INSERT INTO activities
-    (
-        title,
-        description,
-        color
-    )
-    VALUES
-    (
-        'Room Added',
-        'Room $room_no created on Floor $floor_no',
-        'blue'
-    )
-    "
+    logWardenActivity(
+        $conn,
+        "Room Added",
+        "Added Room $room_no on Floor $floor_no.",
+        "blue"
     );
 
     echo json_encode([
@@ -82,6 +79,7 @@ if ($conn->query($sql)) {
         "success" => false,
         "message" => "Failed To Add Room"
     ]);
+
 }
 
 $conn->close();

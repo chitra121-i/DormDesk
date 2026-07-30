@@ -1,6 +1,9 @@
 <?php
 
 include "../db.php";
+include "../helpers/activity_helper.php";
+
+header("Content-Type: application/json");
 
 $data = json_decode(
     file_get_contents("php://input")
@@ -18,11 +21,11 @@ if (!$data) {
 
 $room_no = $data->room_no;
 
-$check = $conn->query(
-    "SELECT current_students
-     FROM rooms
-     WHERE room_no='$room_no'"
-);
+$check = $conn->query("
+SELECT current_students
+FROM rooms
+WHERE room_no='$room_no'
+");
 
 if ($check->num_rows === 0) {
 
@@ -47,26 +50,27 @@ if ($row["current_students"] > 0) {
 }
 
 $sql = "
+
 DELETE FROM rooms
 WHERE room_no='$room_no'
+
 ";
 
 if ($conn->query($sql)) {
 
-    $conn->query("
-        INSERT INTO activities
-        (
-            title,
-            description,
-            color
-        )
-        VALUES
-        (
-            'Room Deleted',
-            'Room $room_no removed',
-            'red'
-        )
-    ");
+    // Warden Activity
+
+    logWardenActivity(
+        $conn,
+        "Room Deleted",
+        "Deleted Room $room_no.",
+        "red"
+    );
+
+    echo json_encode([
+        "success" => true,
+        "message" => "Room Deleted Successfully"
+    ]);
 
 } else {
 
@@ -74,6 +78,7 @@ if ($conn->query($sql)) {
         "success" => false,
         "message" => "Failed To Delete Room"
     ]);
+
 }
 
 $conn->close();

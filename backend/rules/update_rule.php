@@ -11,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] === "OPTIONS") {
 }
 
 include "../db.php";
+include "../helpers/activity_helper.php";
 
 $data = json_decode(
     file_get_contents("php://input"),
@@ -34,11 +35,11 @@ if (!$id || $rule_text === "") {
 }
 
 $sql = "
-    UPDATE hostel_rules
+UPDATE hostel_rules
 
-    SET rule_text = ?
+SET rule_text = ?
 
-    WHERE id = ?
+WHERE id = ?
 ";
 
 $stmt = $conn->prepare($sql);
@@ -50,6 +51,33 @@ $stmt->bind_param(
 );
 
 if ($stmt->execute()) {
+
+    // Warden Activity
+    logWardenActivity(
+        $conn,
+        "Hostel Rule Updated",
+        "Updated a hostel rule.",
+        "green"
+    );
+
+    // Student Activities
+    $students = $conn->query("
+        SELECT id
+        FROM students
+        WHERE approval_status='Approved'
+    ");
+
+    while($student = $students->fetch_assoc()){
+
+        logStudentActivity(
+            $conn,
+            $student["id"],
+            "Hostel Rule Updated",
+            $rule_text,
+            "green"
+        );
+
+    }
 
     echo json_encode([
         "success" => true,

@@ -4,17 +4,17 @@ import { useState, useEffect } from "react";
 function StudentDashboard() {
 
   const navigate = useNavigate();
-const handleLogout = () => {
+  const handleLogout = () => {
 
     const confirmLogout = window.confirm(
-      "Are you sure you want to logout?"
+        "Are you sure you want to logout?"
     );
 
     if (confirmLogout) {
 
       localStorage.removeItem("student");
 
-      navigate("/student-login");
+      navigate("/");
 
     }
 

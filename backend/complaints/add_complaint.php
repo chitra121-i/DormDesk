@@ -51,7 +51,7 @@ VALUES
 
 if($conn->query($sql)){
 
-    addActivity(
+    logStudentActivity(
         $conn,
         $student_id,
         "Complaint Submitted",
